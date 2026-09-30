@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Keiiyn</title>
+<style>
+  :root{
+    --pink:#ff6f9c; --lav:#c39bd3; --glow:#ffb6c1;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;margin:0;overflow:hidden;
+    background:radial-gradient(ellipse at 50% 15%,#3a1b45,#0d0714 75%);
+    font-family:'Georgia',serif;}
+  body{position:relative;height:100dvh;}
+
+  .bubbles{position:absolute;inset:0;overflow:hidden;z-index:0;}
+  .bubble{position:absolute;bottom:-60px;left:var(--x);width:var(--size);height:var(--size);
+    animation:rise var(--duration) linear var(--delay) infinite;
+    filter:drop-shadow(0 0 calc(var(--size)*0.4) var(--glow));}
+  .bubble svg{width:100%;height:100%;animation:beat 2.4s ease-in-out infinite;}
+  @keyframes rise{
+    0%{transform:translate(0,0);opacity:0;}
+    10%{opacity:1;}
+    100%{transform:translate(var(--sway),-115vh);opacity:0;}
+  }
+  @keyframes beat{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
+
+  .page{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    z-index:2;transition:opacity .5s ease;}
+  #page2{opacity:0;pointer-events:none;}
+  #page2.show{opacity:1;pointer-events:auto;}
+  #page1.hide{opacity:0;pointer-events:none;}
+
+  .card{position:relative;text-align:center;color:#fff;
+    padding:40px 28px;max-width:360px;width:88vw;
+    background:rgba(255,255,255,0.07);
+    border:1px solid rgba(255,255,255,0.18);
+    border-radius:26px;backdrop-filter:blur(8px);
+    box-shadow:0 0 50px rgba(255,111,156,0.3);}
+
+  .card h1{font-size:1.5rem;margin:0 0 26px;font-weight:normal;color:var(--glow);
+    text-shadow:0 0 20px rgba(255,182,193,0.6);}
+
+  #big-heart{width:60px;margin:0 auto 14px;display:block;
+    filter:drop-shadow(0 0 20px var(--pink));
+    animation:beat 1.6s ease-in-out infinite;}
+
+  .btn-row{position:relative;display:flex;gap:18px;justify-content:center;
+    min-height:60px;}
+
+  button{border:none;border-radius:999px;font-family:inherit;cursor:pointer;
+    font-size:1rem;padding:12px 26px;transition:transform .2s ease, font-size .2s ease;}
+
+  #yes-btn{background:linear-gradient(135deg,var(--pink),var(--lav));color:#fff;
+    box-shadow:0 4px 20px rgba(255,111,156,0.5);}
+  #yes-btn:active{transform:scale(0.93);}
+
+  #no-btn{background:rgba(255,255,255,0.12);color:#fff;
+    border:1px solid rgba(255,255,255,0.3);position:relative;}
+
+  .hint{margin-top:18px;font-size:0.8rem;opacity:0.5;min-height:16px;}
+
+  /* Page 2 */
+  #page2 .card h1{font-size:2rem;color:#fff;margin-bottom:8px;
+    text-shadow:0 0 25px var(--pink);}
+  #page2 .card p{font-size:1.05rem;color:var(--glow);margin:0;}
+  #confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1;}
+</style>
+</head>
+<body>
+
+  <div class="bubbles" id="bubbles"></div>
+
+  <div class="page" id="page1">
+    <div class="card">
+      <svg id="big-heart" viewBox="0 0 32 29" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#ff6f9c" d="M16 29 2.6 16.7C-3 11.3 0.6 1 8.8 1c3 0 5.7 1.6 7.2 4 1.5-2.4 4.2-4 7.2-4 8.2 0 11.8 10.3 6.2 15.7Z"/>
+      </svg>
+      <h1>Hai, online hanap jowabels pala to HAHAHA</h1>
+      <div class="btn-row" id="btn-row">
+        <button id="yes-btn">Yes 💕</button>
+        <button id="no-btn">No</button>
+      </div>
+      <div class="hint" id="hint"></div>
+    </div>
+  </div>
+
+  <div class="page" id="page2">
+    <div id="confetti"></div>
+    <div class="card">
+      <svg id="big-heart2" viewBox="0 0 32 29" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#ff6f9c" d="M16 29 2.6 16.7C-3 11.3 0.6 1 8.8 1c3 0 5.7 1.6 7.2 4 1.5-2.4 4.2-4 7.2-4 8.2 0 11.8 10.3 6.2 15.7Z"/>
+      </svg>
+      <h1>Papayag din naman pala ei 🤪</h1>
+      <p>Pano na yan I'm yours na baby HAHAHA🫣</p>
+    </div>
+  </div>
+
+<script>
+  /* ---- floating hearts background ---- */
+  function heartSVG(color){
+    return `<svg viewBox="0 0 32 29" xmlns="http://www.w3.org/2000/svg">
+      <path fill="${color}" d="M16 29 2.6 16.7C-3 11.3 0.6 1 8.8 1c3 0 5.7 1.6 7.2 4 1.5-2.4 4.2-4 7.2-4 8.2 0 11.8 10.3 6.2 15.7Z"/>
+    </svg>`;
+  }
+  const colors=['#ff6f9c','#c39bd3','#ffb6c1','#ff9671','#ffffff'];
+  function spawnBubble(container){
+    const el=document.createElement('div');
+    el.className='bubble';
+    const size=16+Math.random()*40;
+    const color=colors[Math.floor(Math.random()*colors.length)];
+    el.style.setProperty('--x',Math.random()*100+'vw');
+    el.style.setProperty('--sway',(Math.random()*140-70)+'px');
+    el.style.setProperty('--size',size+'px');
+    el.style.setProperty('--duration',(7+Math.random()*7)+'s');
+    el.style.setProperty('--delay',(Math.random()*-14)+'s');
+    el.style.setProperty('--glow',color);
+    el.innerHTML=heartSVG(color);
+    container.appendChild(el);
+  }
+  const bubbles=document.getElementById('bubbles');
+  for(let i=0;i<24;i++) spawnBubble(bubbles);
+  setInterval(()=>{ while(bubbles.children.length>60) bubbles.removeChild(bubbles.firstChild); },5000);
+
+  /* ---- dodging No button ---- */
+  const noBtn=document.getElementById('no-btn');
+  const yesBtn=document.getElementById('yes-btn');
+  const row=document.getElementById('btn-row');
+  const hint=document.getElementById('hint');
+  let dodges=0;
+  const hints=[
+    "oops mali pinili mo 😏","mali na naman 🫪",
+    "heeep! try again 🙈","anlaki ng yes button oh! 💗",
+    "hindi tayo matatapos nito ett 🥱","mag yes kana kasi😵‍💫","pinapahirapan mo lang sarili mo ate🙆🏻‍♀️","mag ye-yes na yan😏","pinapa stress mo lang sarili mo ett🤣","what if ako nalang kaya? HAHAHA👀","diba girls is always right?  mag yes kana dalii🤭","bagay naman tayo eh HAHAHAHA🥴","di kana lugi sakin ett😉","husband material naman ako eh HAHAHAHA🫣","kung ako sayo mag yes ka nalang😂","be my baby na kasi🤪","sige ka","pag hindi ka nag yes","hindi ka patutulugin","ni Rene😝"
+  ];
+
+  function dodge(){
+    dodges++;
+    const rowRect=row.getBoundingClientRect();
+    const maxX=Math.max(0, rowRect.width - noBtn.offsetWidth - 4);
+    const maxY=Math.max(0, rowRect.height - noBtn.offsetHeight - 4);
+    // once it's escaped the row, let it roam the whole card area
+    const cardRect=noBtn.closest('.card').getBoundingClientRect();
+    const roamW=cardRect.width - noBtn.offsetWidth - 20;
+    const roamH=cardRect.height - noBtn.offsetHeight - 20;
+    noBtn.style.position='absolute';
+    const newX=Math.random()*roamW;
+    const newY=Math.random()*roamH;
+    noBtn.style.left=newX+'px';
+    noBtn.style.top=newY+'px';
+    // shrink No, grow Yes a little each time, up to a point
+    const shrink=Math.max(0.5, 1 - dodges*0.06);
+    noBtn.style.fontSize=(1*shrink)+'rem';
+    noBtn.style.opacity=Math.max(0.4, shrink);
+    yesBtn.style.fontSize=Math.min(1.5, 1 + dodges*0.04)+'rem';
+    hint.textContent=hints[Math.min(dodges-1, hints.length-1)];
+  }
+
+  // desktop: dodge before the click can land
+  noBtn.addEventListener('mouseenter', dodge);
+  // touch: dodge on first touch so tapping doesn't register as a click
+  noBtn.addEventListener('touchstart', (e)=>{ e.preventDefault(); dodge(); }, {passive:false});
+  // fallback safety: if somehow clicked, just dodge again instead of doing anything
+  noBtn.addEventListener('click', (e)=>{ e.preventDefault(); dodge(); });
+
+  /* ---- Yes ---- */
+  yesBtn.addEventListener('click', ()=>{
+    document.getElementById('page1').classList.add('hide');
+    const page2=document.getElementById('page2');
+    page2.classList.add('show');
+    const confettiWrap=document.getElementById('confetti');
+    for(let i=0;i<40;i++){
+      setTimeout(()=>spawnBubble(confettiWrap), i*40);
+    }
+  });
+</script>
+
+</body>
+</html>
